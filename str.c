@@ -24,9 +24,9 @@ u7_error u7_str_reserve(u7_str* self, size_t capacity) {
     }
     data = malloc(capacity);
     if (!data) {
-      return u7_error_printf(
-          u7_errno_category(), ENOMEM,
-          "cannot allocate memory: malloc(size=%zu) returned NULL", capacity);
+      return u7_errorf(u7_errno_category(), ENOMEM,
+                       "cannot allocate memory: malloc(size=%zu) returned NULL",
+                       capacity);
     }
     memcpy(data, self->data, self->size);
   } else {
@@ -35,7 +35,7 @@ u7_error u7_str_reserve(u7_str* self, size_t capacity) {
     }
     data = realloc(self->data, capacity);
     if (!data) {
-      return u7_error_printf(
+      return u7_errorf(
           u7_errno_category(), ENOMEM,
           "cannot allocate memory: realloc(new_size=%zu) returned NULL",
           capacity);
@@ -46,7 +46,7 @@ u7_error u7_str_reserve(u7_str* self, size_t capacity) {
   return u7_ok();
 }
 
-u7_error u7_str_vprintf(u7_str* self, const char* format, va_list arg) {
+u7_error u7_vstrf(u7_str* self, const char* format, va_list arg) {
   size_t n = 0;
   if (self->capacity > 0) {
     n = self->capacity - self->size;
@@ -69,14 +69,14 @@ u7_error u7_str_vprintf(u7_str* self, const char* format, va_list arg) {
   self->size += m;
   return u7_ok();
 bad_format_string:
-  return u7_error_printf(u7_errno_category(), EINVAL, "bad format string: %s",
-                         format);
+  return u7_errorf(u7_errno_category(), EINVAL, "bad format string: %s",
+                   format);
 }
 
-u7_error u7_str_printf(u7_str* self, const char* format, ...) {
+u7_error u7_strf(u7_str* self, const char* format, ...) {
   va_list arg;
   va_start(arg, format);
-  u7_error error = u7_str_vprintf(self, format, arg);
+  u7_error error = u7_vstrf(self, format, arg);
   va_end(arg);
   return error;
 }

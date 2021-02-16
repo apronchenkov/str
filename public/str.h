@@ -68,9 +68,10 @@ static inline u7_error u7_str_append_str(u7_str* self, const u7_str* str) {
            const u7_str*: u7_str_append_str     \
            )(self, arg)
 
-u7_error u7_str_vprintf(u7_str* self, const char* format, va_list arg);
+u7_error u7_vstrf(u7_str* self, const char* format, va_list arg);
 
-u7_error u7_str_printf(u7_str* self, const char* format, ...);
+u7_error u7_strf(u7_str* self, const char* format, ...)
+    __attribute__((format(printf, 2, 3)));
 
 #ifdef __cplusplus
 }  // extern "C"

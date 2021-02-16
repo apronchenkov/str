@@ -7,7 +7,7 @@ u7_error Main() {
   U7_RETURN_IF_ERROR(u7_str_append(&str, '!'));
   U7_RETURN_IF_ERROR(u7_str_append(&str, '\n'));
   U7_RETURN_IF_ERROR(u7_str_append(&str, &str));
-  U7_RETURN_IF_ERROR(u7_str_printf(&str, "Abra%s%d\n", "cadabra", 3417));
+  U7_RETURN_IF_ERROR(u7_strf(&str, "Abra%s%d\n", "cadabra", 3417));
   fwrite(str.data, str.size, 1, stdout);
   return u7_ok();
 }
@@ -15,9 +15,7 @@ u7_error Main() {
 int main() {
   u7_error error = Main();
   if (error.error_code) {
-    fprintf(stderr, "%s(%d): %*s\n", error.payload->category->name,
-            error.error_code, error.payload->message_length,
-            error.payload->message);
+    fprintf(stderr, "%" U7_ERROR_FMT "\n", U7_ERROR_FMT_PARAMS(error));
     u7_error_release(error);
     return -1;
   }
