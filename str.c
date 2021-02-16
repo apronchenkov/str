@@ -46,7 +46,7 @@ u7_error u7_str_reserve(u7_str* self, size_t capacity) {
   return u7_ok();
 }
 
-u7_error u7_vstrf(u7_str* self, const char* format, va_list arg) {
+u7_error u7_str_vappendf(u7_str* self, const char* format, va_list arg) {
   size_t n = 0;
   if (self->capacity > 0) {
     n = self->capacity - self->size;
@@ -73,10 +73,27 @@ bad_format_string:
                    format);
 }
 
+u7_error u7_str_appendf(u7_str* self, const char* format, ...) {
+  va_list arg;
+  va_start(arg, format);
+  u7_error error = u7_str_vappendf(self, format, arg);
+  va_end(arg);
+  return error;
+}
+
+u7_error u7_vstrf(u7_str* self, const char* format, va_list arg) {
+  u7_str_clear(self);
+  return u7_str_vappendf(self, format, arg);
+}
+
 u7_error u7_strf(u7_str* self, const char* format, ...) {
   va_list arg;
   va_start(arg, format);
   u7_error error = u7_vstrf(self, format, arg);
   va_end(arg);
   return error;
+}
+
+u7_error u7_str_append_error(u7_str* self, u7_error error) {
+  return u7_str_appendf(self, "%" U7_ERROR_FMT, U7_ERROR_FMT_PARAMS(error));
 }

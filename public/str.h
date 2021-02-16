@@ -29,6 +29,16 @@ u7_str u7_str_empty();
 
 u7_error u7_str_reserve(u7_str* self, size_t capacity);
 
+u7_error u7_str_vappendf(u7_str* self, const char* format, va_list arg);
+
+u7_error u7_str_appendf(u7_str* self, const char* format, ...)
+    __attribute__((format(printf, 2, 3)));
+
+u7_error u7_vstrf(u7_str* self, const char* format, va_list arg);
+
+u7_error u7_strf(u7_str* self, const char* format, ...)
+    __attribute__((format(printf, 2, 3)));
+
 static inline void u7_str_clear(u7_str* self) { self->size = 0; }
 
 static inline u7_error u7_str_append_char(u7_str* self, char c) {
@@ -59,19 +69,17 @@ static inline u7_error u7_str_append_str(u7_str* self, const u7_str* str) {
   return u7_ok();
 }
 
+u7_error u7_str_append_error(u7_str* self, u7_error error);
+
 #define u7_str_append(self, arg) \
   _Generic((arg),                               \
            int: u7_str_append_char,             \
            char*: u7_str_append_cstr,           \
            const char*: u7_str_append_cstr,     \
            u7_str*: u7_str_append_str,          \
-           const u7_str*: u7_str_append_str     \
+           const u7_str*: u7_str_append_str,    \
+           u7_error: u7_str_append_error        \
            )(self, arg)
-
-u7_error u7_vstrf(u7_str* self, const char* format, va_list arg);
-
-u7_error u7_strf(u7_str* self, const char* format, ...)
-    __attribute__((format(printf, 2, 3)));
 
 #ifdef __cplusplus
 }  // extern "C"

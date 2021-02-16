@@ -7,7 +7,10 @@ u7_error Main() {
   U7_RETURN_IF_ERROR(u7_str_append(&str, '!'));
   U7_RETURN_IF_ERROR(u7_str_append(&str, '\n'));
   U7_RETURN_IF_ERROR(u7_str_append(&str, &str));
-  U7_RETURN_IF_ERROR(u7_strf(&str, "Abra%s%d\n", "cadabra", 3417));
+  U7_RETURN_IF_ERROR(u7_str_append(&str, u7_ok()));
+  U7_RETURN_IF_ERROR(u7_str_append(&str, '\n'));
+
+  U7_RETURN_IF_ERROR(u7_str_appendf(&str, "Abra%s%d\n", "cadabra", 3417));
   fwrite(str.data, str.size, 1, stdout);
   return u7_ok();
 }
