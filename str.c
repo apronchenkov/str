@@ -10,6 +10,14 @@ u7_str u7_str_empty() {
   return result;
 }
 
+void u7_str_release(u7_str* self) {
+  if (self->capacity > 0) {
+    assert(self->data != NULL);
+    free(self->data);
+  }
+  *self = u7_str_empty();
+}
+
 u7_error u7_str_reserve(u7_str* self, size_t capacity) {
   char* data;
   if (capacity <= self->capacity) {
