@@ -1,7 +1,7 @@
 #ifndef U7_STR_H_
 #define U7_STR_H_
 
-#include <github.com/apronchenkov/error/public/error.h>
+#include <github.com/apronchenkov/init/public/init.h>
 #include <stdarg.h>
 #include <string.h>
 
@@ -24,8 +24,14 @@ typedef struct {
 
 void u7_str_release(u7_str* self);
 
+#define U7_STR_EMPTY \
+  { .data = NULL, .size = 0, .capacity = 0 }
+
 // Returns an empty string.n
-u7_str u7_str_empty();
+static inline u7_str u7_str_empty(void) {
+  u7_str result = U7_STR_EMPTY;
+  return result;
+}
 
 u7_error u7_str_reserve(u7_str* self, size_t capacity);
 
@@ -52,7 +58,7 @@ static inline u7_error u7_str_append_char(u7_str* self, char c) {
 
 static inline u7_error u7_str_append_cstr(u7_str* self, const char* cstr) {
   size_t n = strlen(cstr);
-  if (self->size + n >= self->capacity) {
+  if (self->size + n > self->capacity) {
     U7_RETURN_IF_ERROR(u7_str_reserve(self, self->size + n));
   }
   memcpy(self->data + self->size, cstr, n);
@@ -61,7 +67,7 @@ static inline u7_error u7_str_append_cstr(u7_str* self, const char* cstr) {
 }
 
 static inline u7_error u7_str_append_str(u7_str* self, const u7_str* str) {
-  if (self->size + str->size >= self->capacity) {
+  if (self->size + str->size > self->capacity) {
     U7_RETURN_IF_ERROR(u7_str_reserve(self, self->size + str->size));
   }
   memcpy(self->data + self->size, str->data, str->size);

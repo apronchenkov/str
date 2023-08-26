@@ -2,12 +2,14 @@ cc_library(
     name='str',
     srcs=[
         'str.c',
+        'str_view.c',
     ],
     headers=[
         'public/str.h',
+        'public/str_view.h',
     ],
     deps=[
-        '//github.com/apronchenkov/error:error',
+        '//github.com/apronchenkov/init:init',
     ],
 )
 
@@ -18,6 +20,6 @@ cc_binary(
     ],
     deps=[
         ':str',
-        '//github.com/apronchenkov/error:error',
+        '//github.com/apronchenkov/init:init',
     ],
 )

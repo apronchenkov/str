@@ -5,11 +5,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-u7_str u7_str_empty() {
-  u7_str result = {.data = "", .size = 0, .capacity = 0};
-  return result;
-}
-
 void u7_str_release(u7_str* self) {
   if (self->capacity > 0) {
     assert(self->data != NULL);
